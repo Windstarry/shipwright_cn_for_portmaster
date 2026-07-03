@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Auto-fix CRLF line endings (Windows â†?Linux)
+# Auto-fix CRLF line endings (Windows -> Linux)
 sed -i 's/\r$//' "$0"
 
 set -e
@@ -38,7 +38,6 @@ fi
 echo "=== SoH CN Build ==="
 echo "Port: ${PORT_FOLDER}"
 echo "Arch: ${ARCH}"
-echo "Build: ${PORT_BUILD}"
 
 # Clone and checkout
 git clone https://github.com/wonderfulnx/Shipwright-CN.git
@@ -60,28 +59,28 @@ mkdir build-soh && cd build-soh
 cmake .. -GNinja -DUSE_OPENGLES=1 -DBUILD_CROWD_CONTROL=1 -DCMAKE_BUILD_TYPE=DEBUG
 cmake --build . -j$(nproc)
 cmake --build . --target GenerateSohOtr -j$(nproc)
-cd ../..
+cd "${CDIR}"
 
 # Prepare dist directory
-mkdir -p ${CDIR}/dist/assets/extractor
-mkdir -p ${CDIR}/dist/libs.${ARCH}
+mkdir -p "${CDIR}/dist/assets/extractor"
+mkdir -p "${CDIR}/dist/libs.${ARCH}"
 
 # Copy build outputs
 ls -lha Shipwright-CN/build-soh/soh/
 strip "Shipwright-CN/build-soh/soh/${PORT_EXE}.elf" || true
-cp "Shipwright-CN/build-soh/soh/${PORT_EXE}.elf" "dist/${PORT_EXE}.elf.${ARCH}"
-cp "Shipwright-CN/build-soh/soh/${PORT_EXE}.o2r" "dist/"
+cp "Shipwright-CN/build-soh/soh/${PORT_EXE}.elf" "${CDIR}/dist/${PORT_EXE}.elf.${ARCH}"
+cp "Shipwright-CN/build-soh/soh/${PORT_EXE}.o2r" "${CDIR}/dist/"
 strip "Shipwright-CN/build-soh/ZAPD/ZAPD.out" || true
 cp "Shipwright-CN/build-soh/ZAPD/ZAPD.out" "${CDIR}/dist/assets/extractor/ZAPD.out.${ARCH}"
 
 # Package extractor assets
-cd dist/assets
+cd "${CDIR}/dist/assets"
 mkdir assets_zip
 cp -r "${CDIR}/Shipwright-CN/soh/assets/extractor/." assets_zip/
 cp -r "${CDIR}/Shipwright-CN/soh/assets/xml/" assets_zip/
 cd assets_zip
 zip -r ../extractor.zip ./*
-cd ..
+cd "${CDIR}/dist/assets"
 rm -rf assets_zip
 
 # Copy shared libraries
@@ -90,8 +89,8 @@ for file in "${FILES[@]}"; do
 done
 
 # Create tarball
+cd "${CDIR}"
 ls -lha dist/
-tar -czf "/workspace/${PORT_FOLDER}-linux-${ARCH}.tar.gz" -C ${CDIR}/dist .
+tar -czf "/workspace/${PORT_FOLDER}-linux-${ARCH}.tar.gz" -C dist .
 
 echo "=== Build Complete ==="
-echo "Output: ${PORT_FOLDER}-linux-${ARCH}.tar.gz"
