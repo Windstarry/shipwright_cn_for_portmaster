@@ -1,0 +1,36 @@
+{
+    "version": 4,
+    "name": "soh.zip",
+    "items": [
+        "Ship of Harkinian.sh",
+        "soh"
+    ],
+    "items_opt": null,
+    "attr": {
+        "title": "Ship of Harkinian (简体中文版)",
+        "porter": [
+            "wonderfulnx",
+            "Windstarry"
+        ],
+        "desc": "Ship of Harkinian 简体中文版 - 塞尔达传说：时之笛 &amp; 梅祖拉的假面源码移植。基于 9.2.3-cn-rc1，包含完整的简体中文本地化：2115条中文消息文本、中文UI纹理、CJK字体、HD纹理包支持。",
+        "desc_md": null,
+        "inst": "在设置 -> 语言中选择中文。需要提供合法的 OOT ROM 文件来生成 oot.o2r 资源包。如需 HD 纹理，请将 chinese_font_hd.o2r 和 chinese_menu_hd.o2r 放入 mods/ 文件夹。",
+        "inst_md": null,
+        "genres": [
+            "action",
+            "adventure"
+        ],
+        "image": {},
+        "rtr": false,
+        "exp": false,
+        "runtime": [],
+        "store": [],
+        "availability": "paid",
+        "reqs": [],
+        "arch": [
+            "aarch64",
+            "x86_64"
+        ],
+        "min_glibc": null
+    }
+}

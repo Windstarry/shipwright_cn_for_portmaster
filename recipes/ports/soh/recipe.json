@@ -1,0 +1,13 @@
+{
+  "recipe_version": 1,
+  "name": "soh.zip",
+  "port_json": "new_ports/soh/soh/soh/port.json",
+  "source": {
+    "date_updated": "2026-07-03",
+    "port_exe": "soh",
+    "port_build": "cmake",
+    "port_checksum": "",
+    "port_url": "wonderfulnx/Shipwright-CN",
+    "port_version": "9.2.3-cn-rc1"
+  }
+}
