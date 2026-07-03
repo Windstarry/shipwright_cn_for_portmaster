@@ -19,7 +19,7 @@ permissions:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}/portmaster-builder
+  IMAGE_NAME: windstarry/shipwright-cn-for-portmaster/portmaster-builder
 
 jobs:
   build-builder-image:
