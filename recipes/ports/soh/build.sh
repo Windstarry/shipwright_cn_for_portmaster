@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Auto-fix CRLF line endings (Windows â†’ Linux)
+# Auto-fix CRLF line endings (Windows â†?Linux)
 sed -i 's/\r$//' "$0"
 
 set -e
