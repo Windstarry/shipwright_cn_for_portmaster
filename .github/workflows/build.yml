@@ -96,11 +96,8 @@ jobs:
             runner: ubuntu-24.04-arm
     outputs:
       port_name: ${{ steps.parse-json.outputs.port_name }}
-      port_json: ${{ steps.parse-json.outputs.port_json }}
       port_exe: ${{ steps.parse-json.outputs.port_exe }}
-      port_build: ${{ steps.parse-json.outputs.port_build }}
       port_title: ${{ steps.parse-json.outputs.port_title }}
-      port_bash: ${{ steps.parse-json.outputs.port_bash }}
       port_folder: ${{ steps.parse-json.outputs.port_folder }}
     steps:
       - name: Checkout source
@@ -123,20 +120,13 @@ jobs:
         run: |
           RECIPE_JSON_PATH="recipes/ports/soh/recipe.json"
           PORT_NAME=$(jq -r '.name' "$RECIPE_JSON_PATH")
-          PORT_JSON=$(jq -r '.port_json' "$RECIPE_JSON_PATH")
           PORT_EXE=$(jq -r '.source.port_exe' "$RECIPE_JSON_PATH")
-          PORT_BUILD=$(jq -r '.source.port_build' "$RECIPE_JSON_PATH")
+          PORT_JSON="ports/soh/soh/port.json"
+          PORT_TITLE=$(jq -r '.attr.title' "$PORT_JSON")
           echo "port_name=$PORT_NAME" >> $GITHUB_OUTPUT
-          echo "port_json=$PORT_JSON" >> $GITHUB_OUTPUT
           echo "port_exe=$PORT_EXE" >> $GITHUB_OUTPUT
-          echo "port_build=$PORT_BUILD" >> $GITHUB_OUTPUT
-          PORT_JSON_PATH="${PORT_JSON}"
-          PORT_TITLE=$(jq -r '.attr.title' "$PORT_JSON_PATH")
-          PORT_BASH=$(jq -r '.items[0]' "$PORT_JSON_PATH")
-          PORT_FOLDER=$(jq -r '.items[1]' "$PORT_JSON_PATH" | sed 's|/||g')
           echo "port_title=$PORT_TITLE" >> $GITHUB_OUTPUT
-          echo "port_bash=$PORT_BASH" >> $GITHUB_OUTPUT
-          echo "port_folder=$PORT_FOLDER" >> $GITHUB_OUTPUT
+          echo "port_folder=soh" >> $GITHUB_OUTPUT
 
       - name: Build in container (${{ matrix.arch }})
         run: |
@@ -150,7 +140,7 @@ jobs:
             /bin/bash -c "
             source recipes/ports/${{ steps.parse-json.outputs.port_folder }}/build.sh \
               '${{ steps.parse-json.outputs.port_folder }}' \
-              '${{ steps.parse-json.outputs.port_build }}' \
+              'cmake' \
               '${{ steps.parse-json.outputs.port_exe }}' \
               '${{ matrix.arch }}'
             "
@@ -158,8 +148,8 @@ jobs:
       - name: Upload binary artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ steps.parse-json.outputs.port_folder }}-linux-${{ matrix.arch }}
-          path: ${{ steps.parse-json.outputs.port_folder }}-linux-${{ matrix.arch }}.tar.gz
+          name: soh-linux-${{ matrix.arch }}
+          path: soh-linux-${{ matrix.arch }}.tar.gz
           retention-days: 7
 
   package:
@@ -174,49 +164,51 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           path: artifacts
-          pattern: ${{ needs.build.outputs.port_folder }}-linux-*
+          pattern: soh-linux-*
           merge-multiple: true
 
-      - name: Extract binaries to correct locations
+      - name: Extract binaries to ports directory
         run: |
-          PORT_FOLDER="${{ needs.build.outputs.port_folder }}"
+          mkdir -p ports/soh/soh
           find artifacts -type f -name "*.tar.gz" | while read f; do
-            tar -xzf "$f" -C new_ports/${PORT_FOLDER}/${PORT_FOLDER}/${PORT_FOLDER}/
+            tar -xzf "$f" -C ports/soh/soh/
           done
-          cd new_ports/${PORT_FOLDER}/${PORT_FOLDER}/
-          zip -r "../../../${PORT_FOLDER}.zip" .
 
-      - name: Fix line endings in otrgen
+      - name: Fix line endings
         run: |
-          chmod +x new_ports/soh/soh/soh/assets/otrgen 2>/dev/null || true
-          sed -i 's/\r$//' new_ports/soh/soh/soh/assets/otrgen 2>/dev/null || true
+          find ports/soh/soh -type f \( -name "*.sh" -o -name "otrgen" \) -exec sed -i 's/\r$//' {} \; 2>/dev/null || true
 
-      - name: Commit post build changes
+      - name: Commit build results
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}
-          git add new_ports/soh
+          git add ports/soh/soh
           if git diff --staged --quiet; then
             echo "No changes to commit"
           else
-            git commit -m "Build SOH CN ${{ needs.build.outputs.port_name }} [$(date +%Y-%m-%d)]"
+            git commit -m "Build SOH CN [$(date +%Y-%m-%d)]"
             git push
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Create PortMaster zip
+        run: |
+          cd ports/soh
+          zip -r "../../soh.zip" .
+
       - name: Upload PortMaster package
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ needs.build.outputs.port_folder }}-portmaster
-          path: ${{ needs.build.outputs.port_folder }}.zip
+          name: soh-portmaster
+          path: soh.zip
           retention-days: 7
 
       - name: Show package info
         run: |
           echo "=== Package Information ==="
           echo "Port Name: ${{ needs.build.outputs.port_title }}"
-          echo "Port Folder: ${{ needs.build.outputs.port_folder }}"
+          echo "Port Folder: soh"
           echo "Port EXE: ${{ needs.build.outputs.port_exe }}"
           echo "==========================="
