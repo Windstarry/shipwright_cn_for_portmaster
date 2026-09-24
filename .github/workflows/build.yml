@@ -233,10 +233,14 @@ jobs:
 
       - name: Prepare release files
         run: |
+          # merge-multiple:true flattens all artifact files into artifacts/
+          # (soh.zip, soh-linux-*.tar.gz). Do not use artifacts/<name>/ paths.
           mkdir -p release
-          cp artifacts/soh-portmaster/soh.zip release/
-          cp artifacts/soh-linux-x86_64/soh-linux-x86_64.tar.gz release/
-          cp artifacts/soh-linux-aarch64/soh-linux-aarch64.tar.gz release/
+          find artifacts -type f \( -name 'soh.zip' -o -name 'soh-linux-*.tar.gz' \) -print -exec cp -v {} release/ \;
+          ls -la release/
+          test -f release/soh.zip
+          test -f release/soh-linux-x86_64.tar.gz
+          test -f release/soh-linux-aarch64.tar.gz
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
