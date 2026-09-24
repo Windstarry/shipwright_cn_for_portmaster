@@ -39,10 +39,10 @@ echo "=== SoH CN Build ==="
 echo "Port: ${PORT_FOLDER}"
 echo "Arch: ${ARCH}"
 
-# Clone and checkout
-git clone https://github.com/wonderfulnx/Shipwright-CN.git
+# Clone and checkout (cn branch includes ImGui menu localization)
+git clone https://github.com/Windstarry/Shipwright-CN.git
 cd Shipwright-CN
-git checkout 9.2.3-cn-rc1
+git checkout cn
 git submodule update --init
 
 # Setup compiler

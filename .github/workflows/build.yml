@@ -246,12 +246,13 @@ jobs:
           body: |
             ## Ship of Harkinian 简体中文版
 
-            基于 [Shipwright-CN](https://github.com/wonderfulnx/Shipwright-CN) 的简体中文版，版本 ${{ needs.build.outputs.port_version }}。
+            基于 [Windstarry/Shipwright-CN](https://github.com/Windstarry/Shipwright-CN)（分支 `cn`）的简体中文版，版本 ${{ needs.build.outputs.port_version }}。
             ### 中文版特性
             - 2115 条中文消息文本（来自 iQue ROM）
             - 中文 UI 纹理（动作标签、物品名称、地图标签等）
             - 自定义 CJK 字体（2183 个字形，基于思源黑体）
             - HD 纹理包支持
+            - ImGui 设置菜单简体中文（Menu Language；移植自 Shipwright-cn-XPlat-cel-cn-menu）
             ### 下载文件
             | 文件 | 说明 |
             |------|------|
@@ -263,10 +264,12 @@ jobs:
             1. 将 `soh.zip` 解压到 PortMaster 的 `ports/` 目录
             2. 将 OOT ROM 文件（`.z64`/`.n64`）放入 `baseroms/` 目录
             3. 运行游戏，自动生成资源包
-            4. 在设置 - 语言中选择中文
+            4. 游戏文本：设置 → 语言 选中文；菜单：设置 → Languages → Menu Language 选 中文
 
             ### 致谢
-            - [wonderfulnx/Shipwright-CN](https://github.com/wonderfulnx/Shipwright-CN) - 中文本地化
+            - [Windstarry/Shipwright-CN](https://github.com/Windstarry/Shipwright-CN) - 简体中文游戏文本 / 纹理 / 字体
+            - Shipwright-cn-XPlat-cel-cn-menu - ImGui 设置菜单汉化来源
+            - [wonderfulnx/Shipwright-CN](https://github.com/wonderfulnx/Shipwright-CN) - 早期简体中文基础
             - [PortMaster](https://github.com/PortsMaster/PortMaster) - 移植平台
           files: |
             release/soh.zip

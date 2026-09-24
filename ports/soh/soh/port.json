@@ -12,9 +12,9 @@
             "wonderfulnx",
             "Windstarry"
         ],
-        "desc": "Ship of Harkinian 简体中文版 - 塞尔达传说：时之笛 &amp; 梅祖拉的假面源码移植。基于 9.2.3-cn-rc1，包含完整的简体中文本地化：2115条中文消息文本、中文UI纹理、CJK字体、HD纹理包支持。",
+        "desc": "Ship of Harkinian 简体中文版 - 塞尔达传说：时之笛 &amp; 梅祖拉的假面源码移植。基于 9.2.3-cn-rc2（Windstarry/Shipwright-CN @ cn），包含完整简体中文本地化：2115条中文消息文本、中文UI纹理、CJK字体、HD纹理包，以及 ImGui 设置菜单简体中文（菜单汉化移植自 Shipwright-cn-XPlat-cel-cn-menu）。",
         "desc_md": null,
-        "inst": "在设置 -> 语言中选择中文。需要提供合法的 OOT ROM 文件来生成 oot.o2r 资源包。如需 HD 纹理，请将 chinese_font_hd.o2r 和 chinese_menu_hd.o2r 放入 mods/ 文件夹。",
+        "inst": "游戏文本：设置 -> 语言 选中文。菜单界面：设置 -> Languages -> Menu Language（菜单语言）选 中文，可与游戏文本语言独立切换。需提供合法 OOT ROM 生成 oot.o2r。HD 纹理请将 chinese_font_hd.o2r 与 chinese_menu_hd.o2r 放入 mods/。",
         "inst_md": null,
         "genres": [
             "action",
