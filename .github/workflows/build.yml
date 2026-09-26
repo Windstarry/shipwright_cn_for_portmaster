@@ -1,7 +1,7 @@
 name: Build SOH Chinese Version
 
 on:
-  # Rebuild when this workflow is updated (Debugger font CJK + tooltips).
+  # Rebuild when this workflow is updated (Debugger font CJK + tooltips + check tracker).
   # Source is cloned from
   # Windstarry/Shipwright-CN@cn at build time.
   push:
